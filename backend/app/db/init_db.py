@@ -1,8 +1,10 @@
 from app.db.session import engine, Base, SessionLocal
 from app.models.db_models import Product, Measurement, Verification, Evaluation, ExperimentLog
+from app.create_samples import ensure_sample_images
 from datetime import datetime, timedelta
 
 def init_db():
+    ensure_sample_images()
     Base.metadata.create_all(bind=engine)
     
     db = SessionLocal()

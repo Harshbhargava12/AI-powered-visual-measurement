@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from app.core.config import settings
 from app.api.router import api_router
 from app.db.init_db import init_db
+from app.create_samples import ensure_sample_images
 
 from contextlib import asynccontextmanager
 
@@ -35,8 +36,10 @@ app.add_middleware(
 os.makedirs(settings.UPLOAD_DIR, exist_ok=True)
 app.mount("/static/uploads", StaticFiles(directory=settings.UPLOAD_DIR), name="uploads")
 
-# Include master API router under /api
-app.mount("/samples", StaticFiles(directory=os.path.join(settings.BASE_DIR, "app", "samples")), name="samples") if os.path.exists(os.path.join(settings.BASE_DIR, "app", "samples")) else None
+# Demo sample images (generated on startup if missing)
+SAMPLES_DIR = ensure_sample_images()
+app.mount("/samples", StaticFiles(directory=SAMPLES_DIR), name="samples")
+
 app.include_router(api_router, prefix=settings.API_V1_STR)
 
 @app.get("/")

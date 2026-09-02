@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Search, Filter, CheckCircle2, AlertCircle } from 'lucide-react';
 import { apiService } from '../services/api';
 import { Product } from '../types';
+import { ProductImage } from '../components/common/ProductImage';
 
 export const ProductCatalog: React.FC = () => {
   const [products, setProducts] = useState<Product[]>([]);
@@ -81,7 +82,7 @@ export const ProductCatalog: React.FC = () => {
             <div key={p.id} className="glass-card rounded-2xl p-5 border border-slate-800/80 hover:border-slate-700 transition-all duration-200 space-y-4">
               
               <div className="aspect-video w-full rounded-xl bg-slate-950 overflow-hidden border border-slate-800 relative">
-                <img src={p.image_url} alt={p.name} className="w-full h-full object-contain" />
+                <ProductImage src={p.image_url} alt={p.name} className="w-full h-full" objectFit="contain" />
                 <span className={`absolute top-3 right-3 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider border ${
                   p.verification_status === 'HUMAN_VERIFIED'
                     ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/30 backdrop-blur-md'

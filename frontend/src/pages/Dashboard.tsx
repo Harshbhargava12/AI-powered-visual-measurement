@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Camera, Box, CheckCircle2, AlertCircle, ArrowUpRight, TrendingUp } from 'lucide-react';
 import { apiService } from '../services/api';
 import { AnalyticsOverview, Product } from '../types';
+import { ProductImage } from '../components/common/ProductImage';
 
 interface DashboardProps {
   onStartMeasure: () => void;
@@ -152,7 +153,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onStartMeasure, onNavigate
                   <tr key={p.id} className="hover:bg-slate-900/40 transition-colors">
                     <td className="px-4 py-3.5 font-semibold text-white flex items-center gap-3">
                       <div className="w-10 h-10 rounded-lg bg-slate-800 overflow-hidden flex-shrink-0 border border-slate-700">
-                        <img src={p.image_url} alt={p.name} className="w-full h-full object-cover" />
+                        <ProductImage src={p.image_url} alt={p.name} className="w-full h-full" objectFit="cover" />
                       </div>
                       <span>{p.name}</span>
                     </td>
