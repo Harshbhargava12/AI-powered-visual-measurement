@@ -8,6 +8,8 @@ interface ProductImageProps {
   objectFit?: 'contain' | 'cover';
 }
 
+const BACKEND_URL = 'https://ai-powered-visual-measurement.onrender.com';
+
 export const ProductImage: React.FC<ProductImageProps> = ({
   src,
   alt,
@@ -16,7 +18,17 @@ export const ProductImage: React.FC<ProductImageProps> = ({
 }) => {
   const [failed, setFailed] = useState(false);
 
-  const fitClass = objectFit === 'cover' ? 'object-cover' : 'object-contain';
+  const fitClass =
+    objectFit === 'cover' ? 'object-cover' : 'object-contain';
+
+  let imageSrc = src;
+
+  // Backend relative image paths ko backend URL ke saath load karo
+  if (src && src.startsWith('/')) {
+    imageSrc = `${BACKEND_URL}${src}`;
+  } else if (src && !src.startsWith('http')) {
+    imageSrc = `${BACKEND_URL}/${src}`;
+  }
 
   if (!src || failed) {
     return (
@@ -25,7 +37,10 @@ export const ProductImage: React.FC<ProductImageProps> = ({
         role="img"
         aria-label={`${alt} — image unavailable`}
       >
-        <ImageOff className="w-8 h-8 mb-2 text-slate-600" strokeWidth={1.5} />
+        <ImageOff
+          className="w-8 h-8 mb-2 text-slate-600"
+          strokeWidth={1.5}
+        />
         <span className="text-[10px] font-medium uppercase tracking-wider text-slate-500">
           Image unavailable
         </span>
@@ -35,10 +50,13 @@ export const ProductImage: React.FC<ProductImageProps> = ({
 
   return (
     <img
-      src={src}
+      src={imageSrc}
       alt={alt}
       className={`${className} ${fitClass}`}
-      onError={() => setFailed(true)}
+      onError={() => {
+        console.error('Image failed:', imageSrc);
+        setFailed(true);
+      }}
     />
   );
 };
